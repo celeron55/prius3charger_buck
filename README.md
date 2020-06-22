@@ -6,6 +6,8 @@ For atmega328 on damienmaguire/Prius-Gen3-Inverter version V1c
 
 See comments in [prius3charger_buck.ino](prius3charger_buck.ino) for documentation.
 
+You can show appreciation of this work with money here: https://www.paypal.me/celeron55
+
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
