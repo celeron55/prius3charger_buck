@@ -54,8 +54,6 @@ Notes about connections:
 	  IGBT can carry. This is switched on when the AC contactor and AC precharge
 	  switch outputs are inactive.
 
-TODO: Minimize CANbus message parsing and sending, and amount of stored values
-
 TODO: Maybe make output current and voltage values configurable in EEPROM. It's
 	  mostly a waste of program space though and a risky if you accidentally
 	  change them while monitoring.
