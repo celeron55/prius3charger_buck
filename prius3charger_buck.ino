@@ -86,7 +86,7 @@ Connections:
 #include "software_debounce.h"
 // NOTE: These library portions are included with the project for ease of use.
 // NOTE: They are licensed separately under different open source licenses.
-// NOTE: See the files itself for details.
+// NOTE: See the files for details.
 #include "mcp_can.h"
 #include "can_common.h"
 
