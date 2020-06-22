@@ -65,7 +65,7 @@ Connections:
 - A3: BOOST T2
 - A4: MG1 L1 current (10k/10k resistor divider)
 - A5: MG1 L2 current (10k/10k resistor divider)
-- A6: ACS758LCB-100U current sensor
+- A6: ACS758LCB-100U current sensor (not used in this version)
 - A7: EVSE_PP
 - 2/PD2: EVSE CP
 - 3/PD3: MCP2515 INT
