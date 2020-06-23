@@ -1553,7 +1553,7 @@ void report_status_on_console()
 		static int16_t reported_output_dc_current_Ax10 = 0;
 		static int16_t reported_current_pwm = 0;
 		if(
-			abs(input_voltage_V - reported_input_voltage_V) > (accurate ? 2 : 4) ||
+			abs(input_voltage_V - reported_input_voltage_V) > (accurate ? 2 : 10) ||
 			abs(output_voltage_V - reported_output_voltage_V) > (accurate ? 2 : 4) ||
 			abs(input_dc_current_Ax10 - reported_input_dc_current_Ax10) > (accurate ? 1 : 5) ||
 			((abs(output_dc_current_Ax10 - reported_output_dc_current_Ax10) > (accurate ? 1 : 8)) && current_pwm > 0) ||
