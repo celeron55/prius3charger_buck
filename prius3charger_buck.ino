@@ -282,6 +282,10 @@ const char* const ChargerState_STRINGS[CS_COUNT] = {
 	"CS_WAITING_CANBUS",
 	"CS_WAITING_CHARGE_PERMISSION",
 	"CS_PRECHARGING",
+	"4", // Some room for future development
+	"5",
+	"6",
+	"7",
 	"CS_CHARGING",
 	"CS_STOPPING_CHARGE",
 	"CS_DONE_CHARGING",
