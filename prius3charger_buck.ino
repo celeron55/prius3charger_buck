@@ -104,7 +104,7 @@ Connections:
 #define PWM_FREQ 3900
 
 // CANbus
-// Edit send_canbus_frames() and handle_canbus_frame() to do what you need
+// Edit send_canbus_frames(), handle_canbus_frame() and init_system_can_filters() to do what you need
 #define CANBUS_ENABLE true
 #define CANBUS_SEND_INTERVAL_MS 500
 #define CANBUS_TIMEOUT_MS 2000
