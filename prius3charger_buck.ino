@@ -269,7 +269,7 @@ enum ChargerState {
 	CS_WAITING_CANBUS,
 	CS_WAITING_CHARGE_PERMISSION,
 	CS_PRECHARGING,
-	CS_CHARGING,
+	CS_CHARGING=8,
 	CS_STOPPING_CHARGE,
 	CS_DONE_CHARGING,
 	CS_FAILED, // Keep output shut down and wait state reset by user action
