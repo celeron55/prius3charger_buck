@@ -27,6 +27,9 @@ Prius Gen 3 buck/boost converter charger controller - buck mode charging
 - Alternatively you can use MiniCore for atmega328 with the "no bootloader"
   option and program using any in-circuit programmer supported by avrdude
 
+This program is designed to give excellent information on the serial console
+about what it is doing and why it is doing it.
+
 Notes about connections:
 - AC_CON_CTRL / AC_CONTACTOR_SWITCH:
 	- This activates a contactor to connect AC into MG1 terminals after
