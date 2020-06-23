@@ -1785,8 +1785,8 @@ filter_fail:
 uint8_t pack_32A_into_4bits(uint8_t v)
 {
 	uint8_t r = v / 2;
-	if(v > 0x0f)
-		v = 0x0f;
+	if(r > 0x0f)
+		r = 0x0f;
 	return r;
 }
 
