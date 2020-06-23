@@ -818,7 +818,9 @@ void handle_charger_state()
 		EVERY_N_MILLISECONDS(1000){
 			if(!charger.battery_side_looks_precharged){
 				if(
-					abs(output_voltage_V - charger.precharge_last_battery_voltage) <= 2 &&
+					(abs(output_voltage_V - charger.precharge_last_battery_voltage) <= 2 ||
+							PRECHARGE_BOOST_ENABLED)
+					&&
 					output_voltage_V >= BATTERY_MINIMUM_VOLTAGE
 				){
 					log_print_timestamp();
