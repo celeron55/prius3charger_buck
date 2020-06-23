@@ -115,7 +115,7 @@ Connections:
 // Advanced
 // Prints diagnostics about whether PWM output is limited by voltage or current
 #define REPORT_PWM_LIMITING_VALUE false
-#define RECTIFIED_AC_MINIMUM_VOLTAGE 500  // European 3-phase rectifies to 600V
+#define RECTIFIED_AC_MINIMUM_VOLTAGE 450  // European 3-phase rectifies to 600V
 
 // Absolute maximums
 #define INPUT_CURRENT_MAX_A 32
