@@ -118,7 +118,7 @@ Connections:
 #define INPUT_CURRENT_MAX_A 32
 #define INPUT_VOLTAGE_MAX_V 650  // Maximum of all Toyota inverters
 #define OUTPUT_VOLTAGE_MAX_V 305  // Yaris inverter has 300V and 350V capacitors
-#define BMS_MIN_CELL_MV_FOR_FAIL 4220
+#define BMS_MIN_CELL_MV_FOR_FAIL 2500
 #define BMS_MAX_CELL_MV_FOR_FAIL 4220
 #define BMS_MAX_TEMPREATURE_C_FOR_FAIL 45
 #define BOOST_MAX_TEMPERATURE_C 70
