@@ -514,10 +514,7 @@ void calibrate_current_sensor_zero_offsets_if_needed()
 	// Interrupt at TOP
 	TIMSK1 |= _BV(ICIE1);
 
-	// Set initial PWM
-	//set_ontimes(ICR1 * 0.4, ICR1 * 0.6);
-	//set_pwm_buck_active(ICR1 * 0.1);
-	//set_pwm_buck_active(ICR1 * 0.5);
+	// Set initial PWM to zero
 	set_pwm_inactive();
 
 	current_sensor_zero_offsets_calibrated = true;
@@ -1083,8 +1080,8 @@ void control_inductor_short_switch()
 				EVERY_N_MILLISECONDS(5000){
 					log_println_f("Can't close converter short switch due to voltage "
 							"difference. If you're using the feature, make sure to "
-							"have a bleed down resistor in parallel of the converter "
-							"short switch.");
+							"have a bleed down resistor in parallel with the "
+							"converter short switch.");
 				}
 			}
 		}
@@ -1595,7 +1592,6 @@ void console_help()
 
 void handle_command(const char *command, size_t command_len)
 {
-	// Useful
 	if(command[0] == 'h' || command[0] == '?'){
 		console_help();
 		return;
