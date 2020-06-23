@@ -214,9 +214,9 @@ bool current_sensor_zero_offsets_calibrated = false;
 // Current is measured at the MG current sensors where AC is coming in. This is
 // used to get a somewhat usable DC value from that.
 // 10 extra samples
-AvgBuffer<int16_t, int32_t, PWM_FREQ/PWM_HANDLER_INTERVAL/7/50+10> input_current_avgbuf;
+//AvgBuffer<int16_t, int32_t, PWM_FREQ/PWM_HANDLER_INTERVAL/7/50+10> input_current_avgbuf;
 // 2 full waves
-//AvgBuffer<int16_t, int32_t, PWM_FREQ/PWM_HANDLER_INTERVAL/7/25+1> input_current_avgbuf;
+AvgBuffer<int16_t, int32_t, PWM_FREQ/PWM_HANDLER_INTERVAL/7/25+1> input_current_avgbuf;
 
 int8_t boost_t1_c = 0;
 int8_t boost_t2_c = 0;
