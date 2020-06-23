@@ -570,8 +570,9 @@ void loop()
 
 	EVERY_N_MILLISECONDS(100){
 		apply_canbus_timeouts();
-		convert_evse();
 	}
+
+	convert_evse();
 
 	handle_evse_pwm_timeout();
 
