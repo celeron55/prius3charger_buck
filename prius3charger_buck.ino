@@ -1346,8 +1346,8 @@ static void control_boost()
 		disable_pwm = DPR_PWM_ENABLED;
 		if(boost_single_pulse_state == BSPS_INIT){
 			// Start a pulse if it's needed
-			if(dcbus2_raw >= (int16_t)(INPUT_VOLTAGE_MAX_V / DCBUS2_V_PER_BIT) ||
-					dcbus2_raw >= wanted_output_voltage){
+			if(input_voltage_V >= INPUT_VOLTAGE_MAX_V ||
+					input_voltage_V >= wanted_output_voltage){
 				// Enough voltage, not creating pulse
 				current_pwm = 0;
 				set_pwm_inactive();
@@ -1368,8 +1368,8 @@ static void control_boost()
 		}
 	} else if(wanted_switching_mode == SM_BOOST){
 		disable_pwm = DPR_PWM_ENABLED;
-		if(dcbus2_raw >= (int16_t)(INPUT_VOLTAGE_MAX_V / DCBUS2_V_PER_BIT) ||
-				dcbus2_raw >= wanted_output_voltage){
+		if(input_voltage_V >= INPUT_VOLTAGE_MAX_V ||
+				input_voltage_V >= wanted_output_voltage){
 			// Enough voltage
 			current_pwm = 0;
 			set_pwm_inactive();
