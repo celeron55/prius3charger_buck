@@ -1794,15 +1794,18 @@ void send_canbus_frames()
 		CAN_FRAME frame;
 		frame.id = 0x600;
 		frame.length = 8;
-		bool request_main_contactor =
-				digitalRead(AC_PRECHARGE_SWITCH_PIN) || digitalRead(AC_CONTACTOR_SWITCH_PIN) ||
-				charger_state == CS_PRECHARGING || charger_state == CS_CHARGING ||
-				charger_state == CS_STOPPING_CHARGE;
-		uint16_t pack_voltage_Vx10 = output_voltage_V * 10;
-		uint16_t charge_current_Ax10 = current_pwm == 0 ? 0 : output_dc_current_Ax10;
 		bool request_inverter_disable = (evse_pp_cable_rating_a > 0 ||
 				evse_allowed_amps > 0 || (charger_state >= CS_WAITING_CANBUS &&
 						charger_state <= CS_STOPPING_CHARGE));
+		// Request main contactor, in addition to when it's actually needed,
+		// also when the inverter is requested to be disabled, so that the DC-DC
+		// can maintain charge in the 12V system.
+		bool request_main_contactor =
+				digitalRead(AC_PRECHARGE_SWITCH_PIN) || digitalRead(AC_CONTACTOR_SWITCH_PIN) ||
+				charger_state == CS_PRECHARGING || charger_state == CS_CHARGING ||
+				charger_state == CS_STOPPING_CHARGE || request_inverter_disable;
+		uint16_t pack_voltage_Vx10 = output_voltage_V * 10;
+		uint16_t charge_current_Ax10 = current_pwm == 0 ? 0 : output_dc_current_Ax10;
 		int8_t charger_temperature_c = boost_t1_c;
 		if(charger_temperature_c < boost_t2_c)
 			charger_temperature_c = boost_t2_c;
