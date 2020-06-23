@@ -1557,12 +1557,12 @@ void report_status_on_console()
 			abs(output_voltage_V - reported_output_voltage_V) > (accurate ? 2 : 4) ||
 			abs(input_dc_current_Ax10 - reported_input_dc_current_Ax10) > (accurate ? 1 : 5) ||
 			((abs(output_dc_current_Ax10 - reported_output_dc_current_Ax10) > (accurate ? 1 : 8)) && current_pwm > 0) ||
-			abs(current_pwm - reported_current_pwm) > (accurate ? 1 : 5) ||
+			abs(current_pwm - reported_current_pwm) > (accurate ? 1 : (PWM_MAX/100+1)) ||
 			console_report_all_values
 		){
 			log_print_timestamp();
 			CONSOLE.print(F(">> PWM "));
-			CONSOLE.print((int32_t)current_pwm * 100 / PWM_MAX);
+			CONSOLE.print((float)current_pwm / (float)(PWM_MAX / 100.0));
 			CONSOLE.print(F("%, in "));
 			CONSOLE.print(input_dc_current_Ax10 * 0.1);
 			CONSOLE.print(F("A @ "));
