@@ -104,7 +104,8 @@ Connections:
 #define PRECHARGE_BOOST_ENABLED true
 #define PRECHARGE_BOOST_START_MS 0
 #define PRECHARGE_BOOST_VOLTAGE 600  // European 3-phase rectifies to 600V
-#define PWM_FREQ 3900
+//#define PWM_FREQ 3900  // Works for sure, but is very loud
+#define PWM_FREQ 10000  // Not much tested, but is much quieter
 
 // CANbus
 // Edit send_canbus_frames(), handle_canbus_frame() and init_system_can_filters() to do what you need
@@ -115,7 +116,8 @@ Connections:
 // Advanced
 // Prints diagnostics about whether PWM output is limited by voltage or current
 #define REPORT_PWM_LIMITING_VALUE false
-#define RECTIFIED_AC_MINIMUM_VOLTAGE 450  // European 3-phase rectifies to 600V
+// European 3-phase rectifies to 600V. Our measured voltage likes to sag a lot.
+#define RECTIFIED_AC_MINIMUM_VOLTAGE 350
 
 // Absolute maximums
 #define INPUT_CURRENT_MAX_A 32
@@ -1202,7 +1204,9 @@ static int16_t get_max_input_a()
 		if(force_ac_input_amps != 0)
 			return force_ac_input_amps;
 		// Otherwise use EVSE CP PWM limit
-		return evse_allowed_amps;
+		// Derate slightly just to be sure to not potentially pull too much
+		// current from a public charge point. That would be rude!
+		return evse_allowed_amps - evse_allowed_amps / 8;
 	}();
 
 	// Cable limit (EVSE PP resistor)
