@@ -923,7 +923,7 @@ void handle_charger_state()
 					log_println_f("... Doing AC side precharge boost pulses");
 				}
 				// Make one boost pulse at a time
-				set_wanted_output_V_A_pwm(PRECHARGE_BOOST_VOLTAGE, 1, ICR1*0.02,
+				set_wanted_output_V_A_pwm(PRECHARGE_BOOST_VOLTAGE, 1, ICR1*0.01,
 						SM_BOOST_SINGLE_PULSE);
 			} else {
 				set_wanted_output_V_A_pwm(0, 0, 0, SM_NONE);
