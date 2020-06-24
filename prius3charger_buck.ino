@@ -1198,7 +1198,7 @@ static void set_pwm_inactive()
 
 static int16_t get_max_input_a()
 {
-	int16_t max_input_a = [&](){
+	int16_t max_input_a = [&]() -> int16_t {
 		// If force_ac_input_amps is set, it overrides everything except
 		// INPUT_CURRENT_MAX_A.
 		if(force_ac_input_amps != 0)
