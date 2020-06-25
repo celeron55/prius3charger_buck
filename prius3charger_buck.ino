@@ -57,6 +57,8 @@ Notes about connections:
 	  IGBT can carry. This is switched on when the AC contactor and AC precharge
 	  switch outputs are inactive.
 
+TODO: Calibrate temperature sensors
+
 TODO: Maybe make output current and voltage values configurable in EEPROM. It's
 	  mostly a waste of program space though and a risky if you accidentally
 	  change them while monitoring.
@@ -1731,22 +1733,15 @@ void convert_evse()
 
 void convert_temperatures()
 {
-	// TODO: Fix this mess
 	{
 		int16_t t = boost_t1_raw;
-		// This is weird
-		if(t < 450)
-			t += (879 - 75);
-		// Not calibrated
+		// Not really calibrated
 		const int16_t bits_per_c = (867 - 792) / (20 - 35);
 		boost_t1_c = 20 + (boost_t1_raw - 867) / bits_per_c;
 	}
 	{
 		int16_t t = boost_t2_raw;
-		// This is weird
-		if(t < 450)
-			t += (879 - 75);
-		// Not calibrated
+		// Not really calibrated
 		const int16_t bits_per_c = (867 - 792) / (20 - 35);
 		boost_t2_c = 20 + (boost_t2_raw - 867) / bits_per_c;
 	}
