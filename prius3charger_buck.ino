@@ -111,7 +111,7 @@ Connections:
 // CANbus
 // Edit send_canbus_frames(), handle_canbus_frame() and init_system_can_filters() to do what you need
 #define CANBUS_ENABLE true
-#define CANBUS_SEND_INTERVAL_MS 500
+#define CANBUS_SEND_INTERVAL_MS 200
 #define CANBUS_TIMEOUT_MS 2000
 
 // Advanced
@@ -955,7 +955,7 @@ void handle_charger_state()
 		check_and_react_if_high_power_input_failed();
 
 		if(CANBUS_ENABLE){
-			if(!canbus_status.permit_charge){
+			if(!canbus_status.permit_charge || !canbus_status.main_contactor_closed){
 				report_status_on_console();
 				log_println_f("BMS does not permit charging");
 				charger_state = CS_STOPPING_CHARGE;
