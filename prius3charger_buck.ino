@@ -103,7 +103,7 @@ Connections:
 #define MAX_PRECHARGE_MS 30000
 #define PRECHARGE_BOOST_ENABLED true
 #define PRECHARGE_BOOST_START_MS 0
-#define PRECHARGE_BOOST_VOLTAGE 600  // European 3-phase rectifies to 600V
+#define PRECHARGE_BOOST_VOLTAGE 550  // European 3-phase rectifies to 600V
 //#define PWM_FREQ 3900  // Works for sure, but is very loud
 #define PWM_FREQ 10000  // Not much tested, but is much quieter
 
@@ -116,7 +116,8 @@ Connections:
 // Advanced
 // Prints diagnostics about whether PWM output is limited by voltage or current
 #define REPORT_PWM_LIMITING_VALUE false
-// European 3-phase rectifies to 600V. Our measured voltage likes to sag a lot.
+// European 3-phase rectifies to 600V.
+// Our measured voltage likes to oscillate a lot under load.
 #define RECTIFIED_AC_MINIMUM_VOLTAGE 350
 
 // Absolute maximums
@@ -922,9 +923,12 @@ void handle_charger_state()
 				EVERY_N_MILLISECONDS(500){
 					log_println_f("... Doing AC side precharge boost pulses");
 				}
-				// Make one boost pulse at a time
-				set_wanted_output_V_A_pwm(PRECHARGE_BOOST_VOLTAGE, 1, ICR1*0.01,
-						SM_BOOST_SINGLE_PULSE);
+				EVERY_N_MILLISECONDS(5){
+					// Make one boost pulse at a time so that we get updated
+					// voltage measurements in between
+					set_wanted_output_V_A_pwm(PRECHARGE_BOOST_VOLTAGE, 1, ICR1*0.03,
+							SM_BOOST_SINGLE_PULSE);
+				}
 			} else {
 				set_wanted_output_V_A_pwm(0, 0, 0, SM_NONE);
 				set_pwm_inactive();
