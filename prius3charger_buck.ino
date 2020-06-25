@@ -1592,7 +1592,7 @@ void report_status_on_console()
 			CONSOLE.print(F("A @ "));
 			CONSOLE.print(output_voltage_V);
 			CONSOLE.print(F("V, "));
-			CONSOLE.print((int32_t)input_dc_current_Ax10 * input_voltage_V / 10);
+			CONSOLE.print((int32_t)output_dc_current_Ax10 * output_voltage_V / 10);
 			CONSOLE.println(F("W"));
 
 			reported_input_voltage_V = input_voltage_V;
