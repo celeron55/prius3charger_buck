@@ -101,6 +101,7 @@ Connections:
 #define EVSE_FORCE_INPUT_AMPS 0  // If 0, EVSE CP PWM is followed
 #define EVSE_PWM_TIMEOUT_MS 50
 #define MAX_PRECHARGE_MS 30000
+#define AC_PRECHARGE_MINIMUM_VOLTAGE 550  // European 3-phase rectifies to 600V
 #define PRECHARGE_BOOST_ENABLED true
 #define PRECHARGE_BOOST_START_MS 0
 #define PRECHARGE_BOOST_VOLTAGE 550  // European 3-phase rectifies to 600V
@@ -131,7 +132,6 @@ Connections:
 
 // Some secondary values that can be automatically set
 #define BATTERY_MINIMUM_VOLTAGE (BATTERY_CHARGE_VOLTAGE / 2)
-#define AC_PRECHARGE_MINIMUM_VOLTAGE RECTIFIED_AC_MINIMUM_VOLTAGE
 
 // Hardcoded tests
 #define TEST_CONTACTORS false
@@ -821,9 +821,7 @@ void handle_charger_state()
 		EVERY_N_MILLISECONDS(1000){
 			if(!charger.battery_side_looks_precharged){
 				if(
-					(abs(output_voltage_V - charger.precharge_last_battery_voltage) <= 2 ||
-							PRECHARGE_BOOST_ENABLED)
-					&&
+					abs(output_voltage_V - charger.precharge_last_battery_voltage) <= 2 &&
 					output_voltage_V >= BATTERY_MINIMUM_VOLTAGE
 				){
 					log_print_timestamp();
@@ -853,7 +851,8 @@ void handle_charger_state()
 		EVERY_N_MILLISECONDS(1000){
 			if(!digitalRead(AC_CONTACTOR_SWITCH_PIN)){
 				if(
-					abs(input_voltage_V - charger.precharge_last_input_voltage) <= 2 &&
+					(abs(input_voltage_V - charger.precharge_last_input_voltage) <= 2
+							|| PRECHARGE_BOOST_ENABLED) &&
 					input_voltage_V >= AC_PRECHARGE_MINIMUM_VOLTAGE
 				){
 					uint16_t finish_voltage = input_voltage_V;
@@ -923,10 +922,10 @@ void handle_charger_state()
 				EVERY_N_MILLISECONDS(500){
 					log_println_f("... Doing AC side precharge boost pulses");
 				}
-				EVERY_N_MILLISECONDS(5){
+				EVERY_N_MILLISECONDS(1){
 					// Make one boost pulse at a time so that we get updated
 					// voltage measurements in between
-					set_wanted_output_V_A_pwm(PRECHARGE_BOOST_VOLTAGE, 1, ICR1*0.03,
+					set_wanted_output_V_A_pwm(PRECHARGE_BOOST_VOLTAGE, 1, ICR1*0.05,
 							SM_BOOST_SINGLE_PULSE);
 				}
 			} else {
@@ -1162,6 +1161,14 @@ static void set_ontimes(uint16_t lowswitch_offtime, uint16_t highswitch_ontime)
 	OCR1A = lowswitch_offtime;
 	// OC1B: High side
 	OCR1B = highswitch_ontime;
+
+	// We need to rewind TCNT1 to OCR1A so that the lowside gets turned off.
+	// Otherwise it will stay on for a full PWM cycle until it reaches the
+	// lowered OC1A on the next cycle and by that point we've had quite the
+	// boost pulse. At 10kHz such a pulse will create about 50V of extra voltage
+	// on the MG side.
+	if(TCNT1 >= OCR1A)
+		TCNT1 = OCR1A-1;
 }
 
 // Sets high side switch PWM, and low side switch PWM based on it
