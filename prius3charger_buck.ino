@@ -1217,9 +1217,11 @@ static int16_t get_max_input_a()
 		if(force_ac_input_amps != 0)
 			return force_ac_input_amps;
 		// Otherwise use EVSE CP PWM limit
-		// Derate slightly just to be sure to not potentially pull too much
-		// current from a public charge point. That would be rude!
-		return evse_allowed_amps - evse_allowed_amps / 8;
+		// De-rate to be sure to not potentially pull too much current from a
+		// public charge point. That would be rude!
+		// For some reason a 16A fuse opened when I was charging at what the
+		// code thought was 12A, so we'll de-rate the EVSE value by 25%.
+		return evse_allowed_amps - evse_allowed_amps / 4;
 	}();
 
 	// Cable limit (EVSE PP resistor)
