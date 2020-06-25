@@ -154,7 +154,7 @@ Connections:
 // This is what you need with wrong resistors on Yaris inverter
 //#define MG1_CURRENT_A_PER_BIT 0.735
 
-#define PWM_HANDLER_INTERVAL 2
+#define PWM_HANDLER_INTERVAL (uint8_t)(PWM_FREQ / 3400 + 1)
 
 #define DCBUS1_PIN               A0
 #define DCBUS2_PIN               A1
