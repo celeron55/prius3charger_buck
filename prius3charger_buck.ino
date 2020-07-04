@@ -124,7 +124,7 @@ Connections:
 #define RECTIFIED_AC_MINIMUM_VOLTAGE 350
 
 // Absolute maximums
-#define INPUT_CURRENT_MAX_A 32
+#define INPUT_CURRENT_MAX_A 24  // 32 will blow a 32A fuse. Could be calibration or PF. TODO
 #define INPUT_VOLTAGE_MAX_V 650  // Maximum of all Toyota inverters
 #define OUTPUT_VOLTAGE_MAX_V 305  // Yaris inverter has 300V and 350V capacitors
 #define BMS_MIN_CELL_MV_FOR_FAIL 2500
@@ -1220,7 +1220,7 @@ static int16_t get_max_input_a()
 		// De-rate to be sure to not potentially pull too much current from a
 		// public charge point. That would be rude!
 		// For some reason a 16A fuse opened when I was charging at what the
-		// code thought was 12A, so we'll de-rate the EVSE value by 25%.
+		// code thought was 12A, so we'll de-rate the EVSE value by 25%. TODO
 		return evse_allowed_amps - evse_allowed_amps / 4;
 	}();
 
