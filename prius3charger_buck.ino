@@ -124,7 +124,7 @@ Connections:
 #define RECTIFIED_AC_MINIMUM_VOLTAGE 350
 
 // Absolute maximums
-#define INPUT_CURRENT_MAX_A 24  // 32 will blow a 32A fuse. Could be calibration or PF. TODO
+#define INPUT_CURRENT_MAX_A 32
 #define INPUT_VOLTAGE_MAX_V 650  // Maximum of all Toyota inverters
 #define OUTPUT_VOLTAGE_MAX_V 305  // Yaris inverter has 300V and 350V capacitors
 #define BMS_MIN_CELL_MV_FOR_FAIL 2500
@@ -1217,11 +1217,7 @@ static int16_t get_max_input_a()
 		if(force_ac_input_amps != 0)
 			return force_ac_input_amps;
 		// Otherwise use EVSE CP PWM limit
-		// De-rate to be sure to not potentially pull too much current from a
-		// public charge point. That would be rude!
-		// For some reason a 16A fuse opened when I was charging at what the
-		// code thought was 12A, so we'll de-rate the EVSE value by 25%. TODO
-		return evse_allowed_amps - evse_allowed_amps / 4;
+		return evse_allowed_amps;
 	}();
 
 	// Cable limit (EVSE PP resistor)
@@ -1244,7 +1240,10 @@ static void control_buck()
 	int16_t max_input_a = get_max_input_a();
 
 	// Calibrated input peak A = 2.0 * input RMS A (at around 10kW)
-	int16_t max_input_dc_current_Ax10 = max_input_a * 20;
+	// Well, except that 2.0 will slowly blow a C32 fuse when input current is
+	// set at 32A.
+	// Let's randomly use 1.5, maybe it's good.
+	int16_t max_input_dc_current_Ax10 = max_input_a * 15;
 
 	if(
 		output_dc_current_Ax10 >= wanted_output_current * 20
