@@ -131,6 +131,7 @@ Connections:
 #define BMS_MAX_CELL_MV_FOR_FAIL 4220
 #define BMS_MAX_TEMPREATURE_C_FOR_FAIL 45
 #define BOOST_MAX_TEMPERATURE_C 70
+#define CHARGE_FINISH_AT_A 4
 
 // Some secondary values that can be automatically set
 #define BATTERY_MINIMUM_VOLTAGE (BATTERY_CHARGE_VOLTAGE / 2)
@@ -343,6 +344,7 @@ struct ChargerStatus
 	unsigned long no_start_condition_timestamp = 0;
 	unsigned long start_timestamp = 0;
 	unsigned long precharge_start_timestamp = 0;
+	unsigned long charge_not_looking_complete_timestamp = 0;
 	unsigned long stopping_charge_start_timestamp = 0;
 	unsigned long fail_timestamp = 0;
 	unsigned long allow_measurement_start_timestamp = 0;
@@ -971,26 +973,32 @@ void handle_charger_state()
 		if(CANBUS_ENABLE){
 			if(canbus_status.charge_completed){
 				report_status_on_console();
-				log_println_f("BMS reports charge completion");
+				log_println_f("BMS reports charge completion, stopping");
 				charger_state = CS_STOPPING_CHARGE;
 				charger.stopping_charge_start_timestamp = millis();
 				return;
 			}
 		}
 
-		if(output_voltage_V >= BATTERY_CHARGE_VOLTAGE - 2 &&
-				output_dc_current_Ax10 < 5){
-			if(timestamp_younger_than(charger.start_timestamp, 30000)){
-				EVERY_N_MILLISECONDS(5000){
-					log_println_f("... Charging looks complete but continuing (ignoring BMS)");
-				}
-			} else {
+		bool charge_looks_momentarily_complete =
+				output_voltage_V >= BATTERY_CHARGE_VOLTAGE - 2 &&
+				output_dc_current_Ax10 <= (CHARGE_FINISH_AT_A * 10);
+
+		if(charge_looks_momentarily_complete){
+			if(charger.charge_not_looking_complete_timestamp != 0 &&
+					timestamp_age(charger.charge_not_looking_complete_timestamp) >= 30000){
 				report_status_on_console();
-				log_println_f("Charging looks complete, stopping (ignoring BMS)");
+				log_println_f("Charge looks complete, stopping");
 				charger_state = CS_STOPPING_CHARGE;
 				charger.stopping_charge_start_timestamp = millis();
 				return;
+			} else {
+				EVERY_N_MILLISECONDS(5000){
+					log_println_f("... Charge looks momentarily complete, waiting");
+				}
 			}
+		} else {
+			charger.charge_not_looking_complete_timestamp = millis();
 		}
 
 		// Update output according to vehicle requirements
