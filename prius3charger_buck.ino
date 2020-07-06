@@ -149,7 +149,7 @@ Connections:
 #define DCBUS1_V_PER_BIT 0.438*/
 // Not sure what's up with this, maybe my Prius gen3 inverter is a bit wonky
 #define DCBUS1_OFFSET_BITS 74
-#define DCBUS1_V_PER_BIT 0.560
+#define DCBUS1_V_PER_BIT 0.551
 
 // This is what it should be
 #define MG1_CURRENT_A_PER_BIT 1.0
